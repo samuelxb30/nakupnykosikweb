@@ -1,0 +1,629 @@
+```html
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nákupný košík</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0b0f14;
+            --panel: #111720;
+            --panel-light: #161e29;
+            --border: #263241;
+            --text: #f3f6fa;
+            --muted: #8b98a8;
+            --primary: #5eead4;
+            --primary-dark: #2dd4bf;
+            --danger: #fb7185;
+            --danger-dark: #f43f5e;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: var(--panel);
+            border-right: 1px solid var(--border);
+            padding: 24px 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 12px 30px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .logo-icon {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border-radius: 9px;
+            background: var(--primary);
+            color: #071412;
+            font-weight: bold;
+        }
+
+        .nav-title {
+            color: var(--muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 0 12px 10px;
+        }
+
+        .nav a {
+            display: block;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background: var(--panel-light);
+            color: var(--text);
+        }
+
+        .main {
+            margin-left: 240px;
+            padding: 32px;
+        }
+
+        .topbar {
+            margin-bottom: 32px;
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+
+        .topbar p {
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 20px;
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-header h2 {
+            font-size: 16px;
+        }
+
+        .form {
+            padding: 20px;
+        }
+
+        label {
+            display: block;
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 16px;
+            background: var(--panel-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .primary-button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: #071412;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .primary-button:hover {
+            background: var(--primary-dark);
+        }
+
+        /* RESET TLAČIDLO */
+        .reset-form {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .reset-button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: var(--danger);
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .reset-button:hover {
+            background: var(--danger-dark);
+        }
+
+        .product-list {
+            padding: 10px 20px 20px;
+        }
+
+        .product {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .product:last-child {
+            border-bottom: none;
+        }
+
+        .product-name {
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .product-category {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .product-price {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .out-of-stock {
+            color: var(--danger);
+        }
+
+        .result {
+            margin: 20px;
+            padding: 16px;
+            background: #0d131b;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .result h3 {
+            color: var(--primary);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .result pre {
+            color: var(--text);
+            white-space: pre-wrap;
+            font-family: monospace;
+            line-height: 1.6;
+        }
+
+        .info {
+            padding: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            color: var(--muted);
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-row strong {
+            color: var(--text);
+        }
+
+        .cart-items {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .cart-title {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 13px;
+        }
+
+        .cart-item span:last-child {
+            color: var(--primary);
+        }
+
+        .coupon-message {
+            margin-top: 10px;
+            color: var(--primary);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+    <div class="logo">
+        <div class="logo-icon">K</div>
+        Nákupný košík
+    </div>
+
+    <div class="nav-title">
+        Menu
+    </div>
+
+    <nav class="nav">
+        <a href="/" class="active">🛒 Košík</a>
+        <a href="#kupon">🎟️ Kupón</a>
+    </nav>
+
+</aside>
+
+
+<main class="main">
+
+    <div class="topbar">
+        <div>
+            <h1>Nákupný košík</h1>
+            <p>Vyberte produkty, ktoré chcete kúpiť.</p>
+        </div>
+    </div>
+
+
+    <div class="content">
+
+        <div class="panel">
+
+            <div class="panel-header">
+                <h2>Dostupné produkty</h2>
+            </div>
+
+            <div class="product-list">
+
+                {% for polozka, data in produkty.items() %}
+
+                    {% set cena = data[0] %}
+                    {% set kategoria = data[1] %}
+                    {% set mnozstvo = data[2] %}
+
+                    <div class="product">
+
+                        <div>
+
+                            <div class="product-name">
+                                {{ polozka }}
+                            </div>
+
+                            <div class="product-category">
+
+                                {{ kategoria }} ·
+
+                                {% if mnozstvo > 0 %}
+
+                                    {{ mnozstvo }} ks
+
+                                {% else %}
+
+                                    <span class="out-of-stock">
+                                        Vypredané
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                        <div class="product-price">
+                            {{ "%.2f"|format(cena) }} €
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            {% if vysledky %}
+
+                <div class="result">
+
+                    <h3>Výsledok</h3>
+
+                    <pre>{{ vysledky }}</pre>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <div>
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h2>Pridať do košíka</h2>
+                </div>
+
+                <form class="form" action="/" method="post">
+
+                    <label for="vyber">
+                        Produkt
+                    </label>
+
+                    <select id="vyber" name="vyber" required>
+
+                        <option value="">
+                            Vyber produkt
+                        </option>
+
+                        {% for polozka, data in produkty.items() %}
+
+                            {% set mnozstvo = data[2] %}
+
+                            <option
+                                value="{{ polozka }}"
+                                {% if mnozstvo == 0 %}disabled{% endif %}
+                            >
+
+                                {{ polozka|capitalize }}
+
+                                {% if mnozstvo == 0 %}
+                                    (vypredané)
+                                {% endif %}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+
+                    <label for="value">
+                        Množstvo
+                    </label>
+
+                    <input
+                        id="value"
+                        name="value"
+                        type="number"
+                        min="1"
+                        placeholder="Koľko kusov?"
+                        required
+                    >
+
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
+                        Pridať produkty
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <div class="panel" style="margin-top: 20px;">
+
+                <div class="panel-header">
+                    <h2>🛒 Stav košíka</h2>
+                </div>
+
+                <div class="info">
+
+                    <div class="info-row">
+
+                        <span>
+                            Položky
+                        </span>
+
+                        <strong>
+                            {{ pocet|default(0) }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>
+                            Celková cena
+                        </span>
+
+                        <strong>
+                            {{ "%.2f"|format(celkova_cena|default(0)) }} €
+                        </strong>
+
+                    </div>
+
+
+                    {% if kosik %}
+
+                        <div class="cart-items">
+
+                            <div class="cart-title">
+                                Obsah košíka
+                            </div>
+
+                            {% for polozka, cena, kategoria, mnozstvo in kosik %}
+
+                                <div class="cart-item">
+
+                                    <span>
+                                        {{ polozka|capitalize }}
+                                        × {{ mnozstvo }}
+                                    </span>
+
+                                    <span>
+                                        {{ "%.2f"|format(cena * mnozstvo) }} €
+                                    </span>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+                <!-- RESET -->
+                <form
+                    class="reset-form"
+                    action="/reset"
+                    method="post"
+                >
+                    <button
+                        type="submit"
+                        class="reset-button"
+                    >
+                        🔄 Resetovať nákup
+                    </button>
+                </form>
+
+            </div>
+
+
+            <div
+                class="panel"
+                id="kupon"
+                style="margin-top: 20px;"
+            >
+
+                <div class="panel-header">
+                    <h2>🎟️ Použiť kupón</h2>
+                </div>
+
+                <form
+                    class="form"
+                    action="/kupony"
+                    method="post"
+                >
+
+                    <label for="kupon-kod">
+                        Kód kupónu
+                    </label>
+
+                    <input
+                        id="kupon-kod"
+                        name="kupon"
+                        type="text"
+                        placeholder="Zadajte kód kupónu"
+                        autocomplete="off"
+                        required
+                    >
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
+                        Použiť kupón
+                    </button>
+
+
+                    {% if kupon_vysledok %}
+
+                        <div class="coupon-message">
+                            {{ kupon_vysledok }}
+                        </div>
+
+                    {% endif %}
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+</html>
+```
