@@ -1,8 +1,18 @@
+import os
+
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
+from starlette.middleware.sessions import SessionMiddleware
+import base64
 
 import program
+
+
+admin_password_encrypted = "cm9ib3Rpa2E="
+admin_password = base64.b64decode(admin_password_encrypted).decode("utf-8")
+
+session_secret = "asd55ad64wq864d6w48fdasawde"
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -81,3 +91,6 @@ async def reset_nakupu():
         url="/",
         status_code=303
     )
+
+@app.get("/admin")
+async def admin(request: Request)

@@ -131,3 +131,28 @@ def reset_nakupu():
             kategoria,
             povodne_mnozstva[polozka]
         )
+
+def pridavaniepoloziek(polozka, cena, kategoria, mnozstvo):
+ polozka = str(polozka).strip().lower()
+ kategoria = str(kategoria).strip().lower()
+
+ if not polozka or kategoria:
+     return "vyplň nazov polozky aj kategorie"
+
+ if polozka in polozkyaceny:
+     return "tato polozka uz existuje"
+
+ try:
+     cena = float(cena)
+     mnozstvo = int(mnozstvo)
+ except (ValueError, TypeError):
+     return "nespravny format"
+
+ if cena < 0 or mnozstvo < 0:
+     return "nie zaporne"
+
+ polozkyaceny[polozka] = (cena, kategoria, mnozstvo)
+
+ povodne_mnozstva[polozka] = mnozstvo
+
+ return f"polozka: {polozka} bola uspesne pridana"
