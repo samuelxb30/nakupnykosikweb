@@ -126,8 +126,83 @@ def reset_nakupu():
     pouzity_kupon = None
 
     for polozka, (cena, kategoria, mnozstvo) in polozkyaceny.items():
+
+        povodne = povodne_mnozstva.get(polozka, 0)
+
         polozkyaceny[polozka] = (
             cena,
             kategoria,
-            povodne_mnozstva[polozka]
+            povodne
         )
+
+def pridaj_produkt(polozka, cena, kategoria, mnozstvo):
+    polozka = polozka.strip()
+    kategoria = kategoria.strip()
+
+    if not polozka or not kategoria:
+        return False, "Polozka musi mat nazov aj kategoriu"
+
+    if polozka in polozkyaceny:
+        return False, "polozka uz s tymto nazvvom existuje"
+
+    if cena < 0 or mnozstvo < 0:
+        return False, "cena aj mnozstvo nemozu byt zaporne"
+
+    polozkyaceny[polozka] = (
+        float(cena),
+        str(kategoria),
+        int(mnozstvo)
+    )
+
+    povodne_mnozstva[polozka] = int(mnozstvo)
+
+    return True, "produkt bol pridany"
+
+def uprav_produkt(novy_nazov, stary_nazov, cena, kategoria, mnozstvo):
+    novy_nazov = novy_nazov.strip()
+    kategoria = kategoria.strip()
+
+    if stary_nazov not in polozkyaceny:
+        return False, "produkt sa nenasiel"
+
+    if not novy_nazov or not kategoria:
+        return False, "nazov aj kategoria su povinne"
+
+    if cena < 0 or mnozstvo < 0:
+        return False, "cena aj mnozstvo nemoze byt zaporne"
+
+    if novy_nazov != stary_nazov and novy_nazov in polozkyaceny:
+        return False, "produkt s tymto nazvom uz existuje"
+
+    nova_hodnota = (
+        float(cena),
+        str(kategoria),
+        int(mnozstvo)
+    )
+
+    nove_produkty = {}
+
+    for nazov, data in polozkyaceny.items():
+        if nazov == stary_nazov:
+         nove_produkty[novy_nazov] = nova_hodnota
+        else:
+            nove_produkty[nazov] = data
+
+    if novy_nazov != stary_nazov:
+        povodne_mnozstva.pop(stary_nazov, None)
+
+    povodne_mnozstva[novy_nazov] = int(mnozstvo)
+
+    polozkyaceny.clear()
+    polozkyaceny.update(nove_produkty)
+
+    return True, "podukt bol upraveny"
+
+def odstran_produkt(polozka):
+    if polozka not in polozkyaceny:
+        return False, "produkt sa nenasiel"
+
+    del polozkyaceny[polozka]
+    povodne_mnozstva.pop(polozka, None)
+
+    return True, "produkt bol odstraneny"

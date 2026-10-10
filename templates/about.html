@@ -1,0 +1,701 @@
+
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O nás | Naše potraviny</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0b0f14;
+            --panel: #111720;
+            --panel-light: #161e29;
+            --border: #263241;
+            --text: #f3f6fa;
+            --muted: #8b98a8;
+            --primary: #86efac;
+            --primary-dark: #4ade80;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* BOČNÉ MENU */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: var(--panel);
+            border-right: 1px solid var(--border);
+            padding: 24px 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 12px 30px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border-radius: 9px;
+            background: var(--primary);
+            color: #071412;
+            font-size: 21px;
+        }
+
+        .nav-title {
+            color: var(--muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 0 12px 10px;
+        }
+
+        .nav a {
+            display: block;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            transition: 0.2s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background: var(--panel-light);
+            color: var(--primary);
+        }
+
+        /* HLAVNÝ OBSAH */
+        .main {
+            margin-left: 240px;
+            padding: 32px;
+        }
+
+        .topbar {
+            margin-bottom: 28px;
+        }
+
+        h1 {
+            font-size: 30px;
+            line-height: 1.3;
+        }
+
+        .topbar p {
+            color: var(--muted);
+            margin-top: 8px;
+        }
+
+        /* ÚVODNÝ PANEL */
+        .hero {
+            position: relative;
+            overflow: hidden;
+            padding: 38px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background:
+                radial-gradient(
+                    circle at 90% 10%,
+                    #244833 0,
+                    transparent 35%
+                ),
+                var(--panel);
+        }
+
+        .hero-label {
+            display: inline-block;
+            color: var(--primary);
+            background: #163222;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 18px;
+        }
+
+        .hero h2 {
+            max-width: 650px;
+            font-size: 32px;
+            line-height: 1.3;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            color: var(--muted);
+            max-width: 650px;
+            margin-bottom: 22px;
+        }
+
+        .hero-button {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: var(--primary);
+            color: #071412;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .hero-button:hover {
+            background: var(--primary-dark);
+        }
+
+        /* PANELY */
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-header h2 {
+            font-size: 17px;
+        }
+
+        .panel-body {
+            padding: 22px;
+        }
+
+        .panel-body p {
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+
+        .panel-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* NAŠE HODNOTY */
+        .section-title {
+            font-size: 21px;
+            margin: 30px 0 16px;
+        }
+
+        .values {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .value-card {
+            padding: 22px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .value-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+        .value-icon {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            background: #193626;
+            border-radius: 12px;
+            font-size: 25px;
+            margin-bottom: 16px;
+        }
+
+        .value-card h3 {
+            font-size: 16px;
+            margin-bottom: 9px;
+        }
+
+        .value-card p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* SORTIMENT */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 24px;
+        }
+
+        .category-list {
+            list-style: none;
+        }
+
+        .category-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .category-list li:last-child {
+            border-bottom: none;
+        }
+
+        .category-icon {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            background: var(--panel-light);
+            border-radius: 9px;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .category-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .category-description {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* KONTAKT */
+        .contact-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .contact-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-icon {
+            font-size: 20px;
+        }
+
+        .contact-row strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .contact-row span {
+            display: block;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .contact-row a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .contact-row a:hover {
+            text-decoration: underline;
+        }
+
+        /* ZÁVEREČNÝ PANEL */
+        .bottom-banner {
+            margin-top: 24px;
+            padding: 26px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--panel);
+            text-align: center;
+        }
+
+        .bottom-banner h2 {
+            font-size: 21px;
+            margin-bottom: 8px;
+        }
+
+        .bottom-banner p {
+            color: var(--muted);
+            margin-bottom: 18px;
+        }
+
+        footer {
+            padding: 25px 0 5px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* RESPONZÍVNY DIZAJN */
+        @media (max-width: 1100px) {
+            .values {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .main {
+                padding: 14px;
+            }
+
+            .hero {
+                padding: 25px 20px;
+            }
+
+            .hero h2 {
+                font-size: 25px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+
+            .values {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>  
+
+    <!-- BOČNÉ MENU -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">🥬</div>
+            Naše potraviny
+        </div>
+
+        <div class="nav-title">
+            Navigácia
+        </div>
+
+        <nav class="nav">
+            <a href="/">🛒 Nákupný košík</a>
+            <a href="#uvod" class="active">🏠 O nás</a>
+            <a href="#pribeh">📖 Náš príbeh</a>
+            <a href="#hodnoty">💚 Naše hodnoty</a>
+            <a href="#sortiment">🛒 Sortiment</a>
+            <a href="#kontakt">📞 Kontakt</a>
+        </nav>
+
+    </aside>
+
+
+    <!-- HLAVNÝ OBSAH -->
+    <main class="main">
+
+        <header class="topbar" id="uvod">
+            <h1>O nás</h1>
+            <p>Sme obchod s potravinami, v ktorom je zákazník na prvom mieste.</p>
+        </header>
+
+
+        <!-- ÚVOD -->
+        <section class="hero">
+
+            <span class="hero-label">🥦 Kvalita na každý deň</span>
+
+            <h2>Čerstvé potraviny a poctivý prístup k zákazníkom.</h2>
+
+            <p>
+                Veríme, že kvalitné potraviny patria do každej domácnosti.
+                Naším cieľom je ponúkať pestrý výber každodenných potravín,
+                príjemné prostredie a služby, na ktoré sa môžete spoľahnúť.
+            </p>
+
+            <a href="#sortiment" class="hero-button">
+                Spoznajte náš sortiment
+            </a>
+
+        </section>
+
+
+        <!-- NÁŠ PRÍBEH -->
+        <section class="panel" id="pribeh">
+
+            <div class="panel-header">
+                <h2>📖 Náš príbeh</h2>
+            </div>
+
+            <div class="panel-body">
+
+                <p>
+                    Sme obchod s potravinami, ktorý vznikol s jednoduchou
+                    myšlienkou – sprístupniť ľuďom kvalitné potraviny
+                    a vytvoriť miesto, kam sa budú radi vracať.
+                </p>
+
+                <p>
+                    Každý deň sa snažíme zabezpečiť široký výber výrobkov
+                    pre jednotlivcov aj celé rodiny. U nás nájdete základné
+                    potraviny, čerstvé ovocie a zeleninu, mliečne výrobky,
+                    pečivo aj ďalšie produkty potrebné pre každodenný život.
+                </p>
+
+                <p>
+                    Záleží nám na spokojnosti našich zákazníkov.
+                    Preto kladieme dôraz na ochotný prístup, prehľadnú ponuku
+                    a príjemnú atmosféru pri každom nákupe.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- NAŠE HODNOTY -->
+        <section id="hodnoty">
+
+            <h2 class="section-title">Na čom nám záleží</h2>
+
+            <div class="values">
+
+                <article class="value-card">
+
+                    <div class="value-icon">🥬</div>
+
+                    <h3>Kvalitné potraviny</h3>
+
+                    <p>
+                        Záleží nám na kvalite ponúkaného tovaru a na tom,
+                        aby si zákazníci mohli vyberať z pestrého sortimentu.
+                    </p>
+
+                </article>
+
+
+                <article class="value-card">
+
+                    <div class="value-icon">🤝</div>
+
+                    <h3>Osobný prístup</h3>
+
+                    <p>
+                        Ku každému zákazníkovi pristupujeme s úctou.
+                        Radi poradíme a pomôžeme pri výbere tovaru.
+                    </p>
+
+                </article>
+
+
+                <article class="value-card">
+
+                    <div class="value-icon">🛍️</div>
+
+                    <h3>Pohodlný nákup</h3>
+
+                    <p>
+                        Naším cieľom je, aby bol nákup jednoduchý,
+                        príjemný a aby ste u nás našli všetko potrebné.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- SORTIMENT A KONTAKT -->
+        <div class="content-grid">
+
+            <section class="panel" id="sortiment">
+
+                <div class="panel-header">
+                    <h2>🛒 Čo u nás nájdete?</h2>
+                </div>
+
+                <div class="panel-body">
+
+                    <ul class="category-list">
+
+                        <li>
+                            <div class="category-icon">🍎</div>
+                            <div>
+                                <div class="category-name">
+                                    Ovocie a zelenina
+                                </div>
+                                <div class="category-description">
+                                    Farebný výber na každý deň
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="category-icon">🥖</div>
+                            <div>
+                                <div class="category-name">
+                                    Pečivo a chlieb
+                                </div>
+                                <div class="category-description">
+                                    Na raňajky aj k rodinnému obedu
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="category-icon">🥛</div>
+                            <div>
+                                <div class="category-name">
+                                    Mliečne výrobky
+                                </div>
+                                <div class="category-description">
+                                    Mlieko, syry, jogurty a ďalšie
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="category-icon">🍝</div>
+                            <div>
+                                <div class="category-name">
+                                    Základné potraviny
+                                </div>
+                                <div class="category-description">
+                                    Cestoviny, ryža, múka a strukoviny
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="category-icon">🧃</div>
+                            <div>
+                                <div class="category-name">
+                                    Nápoje a pochutiny
+                                </div>
+                                <div class="category-description">
+                                    Nápoje, sladkosti a slané pochutiny
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </section>
+
+
+            <!-- KONTAKT -->
+            <section class="panel" id="kontakt">
+
+                <div class="panel-header">
+                    <h2>📞 Kontaktujte nás</h2>
+                </div>
+
+                <div class="panel-body">
+
+                    <p>
+                        Máte otázku, pripomienku alebo sa chcete
+                        informovať o našej ponuke? Radi vás privítame.
+                    </p>
+
+                    <div class="contact-row">
+                        <div class="contact-icon">📍</div>
+                        <div>
+                            <strong>Adresa predajne</strong>
+                            <span>Doplňte ulicu a mesto</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-row">
+                        <div class="contact-icon">📧</div>
+                        <div>
+                            <strong>E-mail</strong>
+                            <span>
+                                <a href="mailto:info@nasapotraviny.sk">
+                                    info@nasapotraviny.sk
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="contact-row">
+                        <div class="contact-icon">📱</div>
+                        <div>
+                            <strong>Telefón</strong>
+                            <span>Doplňte telefónne číslo</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-row">
+                        <div class="contact-icon">🕒</div>
+                        <div>
+                            <strong>Otváracie hodiny</strong>
+                            <span>Doplňte otváracie hodiny predajne</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- ZÁVEREČNÁ VÝZVA -->
+        <section class="bottom-banner">
+
+            <h2>Tešíme sa na vašu návštevu! 💚</h2>
+
+            <p>
+                Ďakujeme, že nakupujete u nás.
+                Vaša spokojnosť je pre nás najväčšou odmenou.
+            </p>
+
+            <a href="#uvod" class="hero-button">
+                Späť na začiatok ↑
+            </a>
+
+        </section>
+
+
+        <footer>
+            © 2026 Naše potraviny. Všetky práva vyhradené.
+        </footer>
+
+    </main>
+
+</body>
+</html>
