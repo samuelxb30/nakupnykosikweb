@@ -1,4 +1,6 @@
 fastapi
 uvicorn
-jinja2 
+jinja2
+itsdangerous
 python-multipart
+python-dotenv
