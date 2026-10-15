@@ -136,8 +136,8 @@ def reset_nakupu():
         )
 
 def pridaj_produkt(polozka, cena, kategoria, mnozstvo):
-    polozka = polozka.strip()
-    kategoria = kategoria.strip()
+    polozka = polozka.strip().lower()
+    kategoria = kategoria.strip().lower()
 
     if not polozka or not kategoria:
         return False, "Polozka musi mat nazov aj kategoriu"
@@ -159,8 +159,8 @@ def pridaj_produkt(polozka, cena, kategoria, mnozstvo):
     return True, "produkt bol pridany"
 
 def uprav_produkt(novy_nazov, stary_nazov, cena, kategoria, mnozstvo):
-    novy_nazov = novy_nazov.strip()
-    kategoria = kategoria.strip()
+    novy_nazov = novy_nazov.strip().lower()
+    kategoria = kategoria.strip().lower()
 
     if stary_nazov not in polozkyaceny:
         return False, "produkt sa nenasiel"
